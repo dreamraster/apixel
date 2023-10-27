@@ -1,4 +1,4 @@
-# apixel
+# aPiXeL (aka PAul/chuanXIn/LEo)
 Stable Diffusion with Unity Sentis
 
 This project is essentially a port of https://github.com/cassiebreviu/StableDiffusion to Unity Sentis 
