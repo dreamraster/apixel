@@ -1,4 +1,4 @@
-# aPiXeL (aka PAul/chuanXIn/LEo)
+# aPiXeL 
 Stable Diffusion with Unity Sentis
 
 This project is essentially a port of https://github.com/cassiebreviu/StableDiffusion to Unity Sentis 
@@ -39,5 +39,4 @@ Please use the latest 2022.3 version of Unity. You may also need access to Unity
 ## Demo:
 
 ![Screenshot](Assets/screenshot.png)
-
 ***dreamraster***
