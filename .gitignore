@@ -6,3 +6,4 @@ Library/*
 *.sln
 *.csproj
 Temp/*
+.idea/.idea.apixel/.idea/*
