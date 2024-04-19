@@ -72,8 +72,6 @@ namespace aPiXeL
 
         private static TensorFloat Guidance(TensorFloat noisePred, TensorFloat noisePredText, float guidanceScale)
         {
-            noisePred.MakeReadable();
-            noisePredText.MakeReadable();
             noisePred = Utility.Guidance(noisePred, noisePredText, guidanceScale);
             return noisePred;
         }
@@ -86,13 +84,12 @@ namespace aPiXeL
             var tensor1Array = new NativeArray<float>(length, Allocator.Temp);
             var tensor2Array = new NativeArray<float>(length, Allocator.Temp);
 
-            tensorToSplit.MakeReadable();
             var tensorToSplitArray = tensorToSplit.ToReadOnlyNativeArray();
             NativeArray<float>.Copy(tensorToSplitArray, 0, tensor1Array, 0, length);
             NativeArray<float>.Copy(tensorToSplitArray, length, tensor2Array, 0, length);
 
-            var tensor1 = new TensorFloat(shape, tensor1Array);
-            var tensor2 = new TensorFloat(shape, tensor2Array);
+            var tensor1 = new TensorFloat(shape, tensor1Array, 0);
+            var tensor2 = new TensorFloat(shape, tensor2Array, 0);
             return new Tuple<TensorFloat, TensorFloat>(tensor1, tensor2);
         }
 
@@ -107,7 +104,7 @@ namespace aPiXeL
                 var raw = (float*)NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(result);
                 Utility.CreateRandom((uint)_seed, shape.length, noiseSigma, raw);
             }
-            return new TensorFloat(shape, result);
+            return new TensorFloat(shape, result, 0);
         }
 
         public void Execute(string prompt, int steps, float guidance, int seed, string outputPath)
@@ -128,7 +125,6 @@ namespace aPiXeL
             // Text Encoder.
             var textEncoder = _text_encoder.Do(textTensor);
             var textEmbeddingShape = new TensorShape(2, 77, 768);
-            textEncoder.MakeReadable();
             var textEmbeddingTensor = new TensorFloat(textEmbeddingShape, textEncoder.ToReadOnlyArray());
             var timeStart = Time.realtimeSinceStartup;
 
@@ -136,8 +132,6 @@ namespace aPiXeL
             var timeSteps = _scheduler.SetTimesteps(steps);
             var latents = GenerateLatent(4, _scheduler.InitNoiseSigma, settings);
             var random = Unity.Mathematics.Random.CreateFromIndex((uint)seed);
-            latents.MakeReadable();
-
             Debug.LogFormat("Text Encoder {0} seconds elapsed", Time.realtimeSinceStartup - timeStart);
 
             for (int t = 0; t < steps; t++)
@@ -154,17 +148,14 @@ namespace aPiXeL
                 var noisePred = splitTensors.Item1;
                 var noisePredText = splitTensors.Item2;
                 noisePred = Guidance(noisePred, noisePredText, guidance);
-                noisePred.MakeReadable();
 
                 latents = _scheduler.Step(noisePred, timeSteps[t], latents, random.NextInt());
-                latents.MakeReadable();
 
                 Debug.LogFormat("After {0} steps {1} seconds elapsed", t, Time.realtimeSinceStartup - timeStart);
             }
 
             var latentsScaled = Utility.Multiply(latents, _scale);
             var decoderOutput = _vae.Execute(latentsScaled) as TensorFloat;
-            decoderOutput.MakeReadable();
 
             Debug.LogFormat("Inference completed in {0} seconds", Time.realtimeSinceStartup - timeStart);
 

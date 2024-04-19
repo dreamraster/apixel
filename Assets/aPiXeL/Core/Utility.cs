@@ -39,7 +39,7 @@ namespace aPiXeL
                 var rawC = (float*)NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(res);
                 BurstAdd(rawA, rawB, rawC, roa.Length);
             }
-            return new TensorFloat(a.shape, res);
+            return new TensorFloat(a.shape, res, 0);
 
         }
 
@@ -69,7 +69,7 @@ namespace aPiXeL
                 var rawC = (float*)NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(res);
                 BurstSubtract(rawA, rawB, rawC, roa.Length);
             }
-            return new TensorFloat(a.shape, res);
+            return new TensorFloat(a.shape, res, 0);
 
         }
 
@@ -96,7 +96,7 @@ namespace aPiXeL
                 var rawC = (float*)NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(res);
                 BurstMultiply(rawA, b, rawC, roa.Length);
             }
-            return new TensorFloat(a.shape, res);
+            return new TensorFloat(a.shape, res, 0);
 
         }
 
@@ -113,7 +113,7 @@ namespace aPiXeL
                 var rawC = (float*)NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(res);
                 BurstMultiply(rawA, b, rawC, roa.Length);
             }
-            return new TensorFloat(a.shape, res);
+            return new TensorFloat(a.shape, res, 0);
 
         }
 
@@ -145,7 +145,7 @@ namespace aPiXeL
                 CreateRandom((uint)_seed, length, sigma, raw);
             }
             var shape = new TensorShape(new[] { length });
-            return new TensorFloat(shape, res);
+            return new TensorFloat(shape, res, 0);
 
         }
 
@@ -160,7 +160,7 @@ namespace aPiXeL
                 var raw = (float*)NativeArrayUnsafeUtility.GetUnsafeReadOnlyPtr(res);
                 CreateRandom((uint)_seed, shape.length, sigma, raw);
             }
-            return new TensorFloat(shape, res);
+            return new TensorFloat(shape, res, 0);
 
         }
 
@@ -191,7 +191,7 @@ namespace aPiXeL
                 Guidance(rawA, rawB, rawC, c, roa.Length);
             }
 
-            return new TensorFloat(a.shape, res);
+            return new TensorFloat(a.shape, res,0);
 
         }
 

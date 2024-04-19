@@ -32,13 +32,12 @@ public class U2NetEditor : Editor
             if (U2NetEngine == null)
             {
                 U2NetEngine = new Engine();
-                U2NetEngine.Init(sd._backgrundRemover, BackendType.CPU);
+                U2NetEngine.Init(sd._backgroundRemover, BackendType.CPU);
             }
 
             var _input = Resize(sd._inputTexture, 320, 320);
             var _texture = TextureConverter.ToTensor(_input);
             var _output = U2NetEngine.Execute(_texture) as TensorFloat;
-            _output.MakeReadable(); 
             
             var renderTexture = TextureConverter.ToTexture(_output);
             RenderTexture.active = renderTexture;

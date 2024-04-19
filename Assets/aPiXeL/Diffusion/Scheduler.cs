@@ -96,10 +96,7 @@ namespace aPiXeL
             var stepIndex = this.Timesteps.IndexOf((int)timestep);
             var sigma = this.Sigmas[stepIndex];
 
-            modelOutput.MakeReadable();
             var moduleOutputSample = Utility.Multiply(modelOutput, sigma);
-            sample.MakeReadable();
-            moduleOutputSample.MakeReadable();
             var predOriginalSample = Utility.Subtract(sample, moduleOutputSample);
 
             var sigmaFrom = this.Sigmas[stepIndex];
@@ -112,24 +109,15 @@ namespace aPiXeL
             var sigmaDownResult = (MathF.Pow(sigmaTo, 2) - MathF.Pow(sigmaUp, 2));
             var sigmaDown = sigmaDownResult < 0 ? -MathF.Pow(MathF.Abs(sigmaDownResult), 0.5f) : MathF.Pow(sigmaDownResult, 0.5f);
 
-            predOriginalSample.MakeReadable();
             var sampleMinusPredOriginalSample = Utility.Subtract(sample, predOriginalSample);
-            sampleMinusPredOriginalSample.MakeReadable();
             var derivative = Utility.Divide(sampleMinusPredOriginalSample, sigma);
 
             var dt = sigmaDown - sigma;
-
-            derivative.MakeReadable();
             var derivativeSample = Utility.Multiply(derivative, dt);
-            derivativeSample.MakeReadable();
             var prevSample = Utility.Add(sample, derivativeSample);
 
             var noise = Utility.CreateRandomTensor(seed, prevSample.shape, 1.0f);
-            noise.MakeReadable();
-
             var noiseSigmaUpProduct = Utility.Multiply(noise, sigmaUp);
-            prevSample.MakeReadable();
-            noiseSigmaUpProduct.MakeReadable();
             prevSample = Utility.Add(prevSample, noiseSigmaUpProduct);
             return prevSample;
 
@@ -140,8 +128,6 @@ namespace aPiXeL
             int stepIndex = this.Timesteps.IndexOf(timestep);
             var sigma = this.Sigmas[stepIndex];
             sigma = (float)Math.Sqrt((Math.Pow(sigma, 2) + 1));
-
-            sample.MakeReadable();
             sample = Utility.Divide(sample, sigma);
             _is_scale_input_called = true;
             return sample;

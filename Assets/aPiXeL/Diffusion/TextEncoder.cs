@@ -21,20 +21,16 @@ namespace aPiXeL
             var textInputTensor = new TensorInt(textShape, textInput);
 
             var textOutputTensor = Execute(textInputTensor) as TensorFloat;
-            textOutputTensor.MakeReadable();
 
             var results = new float[2 * _embedding_size];
             for (int i = 0; i < _embedding_size; ++i)
                 results[i] = textOutputTensor[i];
 
             // Text Encoder | Generate for Prompt.
-            input.MakeReadable();
-            textInputTensor.MakeReadable();
             for (int i = 0; i < input.shape[0]; ++i)
                 textInputTensor[i] = input[i];
             textOutputTensor = Execute(textInputTensor) as TensorFloat;
 
-            textOutputTensor.MakeReadable();
             for (int i = 0; i < _embedding_size; ++i)
                 results[_embedding_size + i] = textOutputTensor[i];
             textInputTensor.Dispose();

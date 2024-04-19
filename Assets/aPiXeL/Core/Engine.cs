@@ -31,7 +31,7 @@ namespace aPiXeL
         {
             bool progress = false;
 
-            IEnumerator modelEnumerator = engine.StartManualSchedule(input);
+            IEnumerator modelEnumerator = engine.ExecuteLayerByLayer(input);
             do
             {
                 progress = modelEnumerator.MoveNext();
@@ -50,7 +50,7 @@ namespace aPiXeL
         {
             bool progress = false;
 
-            IEnumerator modelEnumerator = engine.StartManualSchedule(input);
+            IEnumerator modelEnumerator = engine.ExecuteLayerByLayer(input);
             do
             {
                 progress = modelEnumerator.MoveNext();
